@@ -4,9 +4,15 @@ public class Client extends Thread {
     private Bank bank;
     private int accountNumber;
 
-    public Client(Bank bank, int accountNumber) {
+    private double amount;
+
+    private String trasaction;
+
+    public Client(Bank bank, int accountNumber,double amount, String trasaction ) {
         this.bank = bank;
         this.accountNumber = accountNumber;
+        this.amount = amount;
+        this.trasaction= trasaction;
     }
 
     @Override
@@ -15,11 +21,18 @@ public class Client extends Thread {
         BankAccount account = bank.getAccount(accountNumber);
         if (account != null) {
             // Simulate deposit
-            account.deposit(100);
+            switch (trasaction){
+                case "deposit":
+                    account.deposit(amount);
+                    break;
 
-            // Simulate withdrawal
-            account.withdraw(50);
+                case "withdrawal":
+                    account.withdraw(amount);
+                    break;
 
+                default:
+                    System.out.println("enterd transaction is not valid");
+            }
             // Simulate balance check
             double balance = account.checkBalance();
             System.out.println("Balance for account " + accountNumber + ": " + balance);
