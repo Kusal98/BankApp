@@ -30,4 +30,8 @@ public class BankAccount {
     public Integer getAccountNumber() {
         return this.accountNumber;
     }
+
+    public String getAccountHolderName(){
+        return this.accountHolderName;
+    }
 }

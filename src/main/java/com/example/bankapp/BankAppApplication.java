@@ -1,4 +1,6 @@
 package com.example.bankapp;
+import java.io.File;
+import java.util.Random;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,25 +9,34 @@ public class BankAppApplication {
 
     public static void main(String[] args) {
         Bank bank = new Bank();
+        Random random = new Random();
 
-        BankAccount account1 = new BankAccount(1, "John Doe", 700);
-        BankAccount account2 = new BankAccount(2, "Jane Smith", 1000);
-        bank.addAccount(account1);
-        bank.addAccount(account2);
+        BankAccount[] accounts = new BankAccount[10];
 
-        Client client1 = new Client(bank, 1,500,"withdrawal");
-        Client client2 = new Client(bank, 2,1250,"deposit");
+        accounts[0] = new BankAccount(1111, "James", 70);
+        accounts[1] = new BankAccount(1112, "Mike", 1200);
+        accounts[2] = new BankAccount(1113, "Elen", 3700);
+        accounts[3] = new BankAccount(1114, "Jessie", 5400);
+        accounts[4] = new BankAccount(1115, "Stacy", 540);
+        accounts[5] = new BankAccount(1116, "Cathryn", 530);
+        accounts[6] = new BankAccount(1117, "Adela", 7560);
+        accounts[7] = new BankAccount(1118, "Cody", 5450);
+        accounts[8] = new BankAccount(1119, "Mellie", 65560);
+        accounts[9] = new BankAccount(1110, "Gail", 106);
 
-        // Start the clients
-        client1.start();
-        client2.start();
-
-        // Wait for clients to finish
-        try {
-            client1.join();
-            client2.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for (BankAccount account : accounts) {
+            bank.addAccount(account);
         }
+
+        ThreadGroup regularClientsGroup = new ThreadGroup("Regular Clients");
+        ThreadGroup vipClientsGroup = new ThreadGroup("VIP Clients");
+
+        for (int i = 0; i < 10; i++) {
+            boolean isDeposit = random.nextBoolean();
+            int amount = random.nextInt(100);
+            ThreadGroup clientGroup = i < 5 ? regularClientsGroup : vipClientsGroup;
+            new Thread(clientGroup, new Client(bank, accounts[i].getAccountNumber(), amount, isDeposit ? "deposit" : "withdrawal"), "Client " + i).start();
+        }
+
     }
 }

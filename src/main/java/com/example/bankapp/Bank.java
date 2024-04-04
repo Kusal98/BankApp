@@ -1,20 +1,20 @@
 package com.example.bankapp;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Bank {
-    private Map<Integer, BankAccount> accounts;
+    private ConcurrentHashMap<Integer, BankAccount> accounts;
 
     public Bank() {
-        this.accounts = new HashMap<>();
+
+        this.accounts = new ConcurrentHashMap<>();
     }
 
-    public synchronized void addAccount(BankAccount account) {
-        accounts.put(account.getAccountNumber(), account);
+    public void addAccount(BankAccount account) {
+
+        accounts.putIfAbsent(account.getAccountNumber(), account);
     }
 
-    public synchronized BankAccount getAccount(int accountNumber) {
+    public BankAccount getAccount(int accountNumber) {
         return accounts.get(accountNumber);
     }
 }

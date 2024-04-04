@@ -3,9 +3,7 @@ package com.example.bankapp;
 public class Client extends Thread {
     private Bank bank;
     private int accountNumber;
-
     private double amount;
-
     private String trasaction;
 
     public Client(Bank bank, int accountNumber,double amount, String trasaction ) {
