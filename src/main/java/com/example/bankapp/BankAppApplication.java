@@ -35,8 +35,11 @@ public class BankAppApplication {
             boolean isDeposit = random.nextBoolean();
             int amount = random.nextInt(100);
             ThreadGroup clientGroup = i < 5 ? regularClientsGroup : vipClientsGroup;
-            new Thread(clientGroup, new Client(bank, accounts[i].getAccountNumber(), amount, isDeposit ? "deposit" : "withdrawal"), "Client " + i).start();
+            try {
+                new Thread(clientGroup, new Client(bank, accounts[i].getAccountNumber(), amount, isDeposit ? "deposit" : "withdrawal"), "Client " + i).start();
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error creating client thread: " + e.getMessage());
+            }
         }
-
     }
 }
